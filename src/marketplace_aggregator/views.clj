@@ -27,7 +27,7 @@
          {:type "text"
           :name "query"
           :required "true"
-          :placeholder "search query"}]]
+          :placeholder "What are you looking for?"}]]
        [:div.form-group.col-6
         [:label {:for "location"} "Location"]
         [:select#location.form-control.custom-select
@@ -42,6 +42,7 @@
 (defn result->html [result]
   (hiccup/html [:li.list-group-item
                 [:span.badge.badge-pill.badge-light (result :source)]
+                [:span " "]
                 [:span [:a {:href (result :href)} (result :title)]
                  " - "
                  (let [price (result :price)]
