@@ -1,3 +1,6 @@
+;; TODO modify algorithm to fetch all pages of results
+;; TODO route all requests through a proxy or Tor layer
+
 (ns marketplace-aggregator.craigslist
   (:require [clojure.string :as string]
             [clj-http.client :as http]
@@ -722,6 +725,7 @@
   (get sites-map (string/lower-case location) "https://craigslist.org/"))
 
 (defn fetch-craigslist-results [query location]
+  (println (get-regional-site location))
   (html/html-snippet
    (:body (http/get (str (get-regional-site location)
                          "search/sss?query="
@@ -734,7 +738,12 @@
            (models/make-result
             (first (:content (first (html/select row [:a.result-title]))))
             (get-in (first (html/select row [:a.result-title])) [:attrs :href])
-            (Integer/parseInt (apply str (rest (first (:content (first (html/select row [:span.result-price])))))))))
+            (let [price
+                  (apply str
+                         (rest (first (:content (first (html/select row [:span.result-price]))))))]
+              (if (= price "")
+                -1
+                (Float/parseFloat price)))))
          result-rows)))
 
 (defn search [query location]
