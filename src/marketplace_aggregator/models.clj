@@ -1,6 +1,7 @@
 (ns marketplace-aggregator.models)
 
-(defn make-result [title href price]
+(defn make-result [title href price source]
   {:title title
    :href href
-   :price price})
+   :price price
+   :source source})

@@ -41,6 +41,7 @@
 
 (defn result->html [result]
   (hiccup/html [:li.list-group-item
+                [:span.badge.badge-pill.badge-light (result :source)]
                 [:span [:a {:href (result :href)} (result :title)]
                  " - "
                  (let [price (result :price)]

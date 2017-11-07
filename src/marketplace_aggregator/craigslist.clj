@@ -742,7 +742,8 @@
                          (rest (first (:content (first (html/select row [:span.result-price]))))))]
               (if (= price "")
                 -1
-                (Float/parseFloat price)))))
+                (Float/parseFloat price)))
+            "Craigslist"))
          result-rows)))
 
 (defn search [query location]
