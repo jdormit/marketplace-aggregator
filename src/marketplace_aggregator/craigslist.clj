@@ -725,7 +725,6 @@
   (get sites-map (string/lower-case location) "https://craigslist.org/"))
 
 (defn fetch-craigslist-results [query location]
-  (println (get-regional-site location))
   (html/html-snippet
    (:body (http/get (str (get-regional-site location)
                          "search/sss?query="
