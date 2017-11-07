@@ -44,11 +44,11 @@
                 [:span.badge.badge-pill.badge-light (result :source)]
                 [:span " "]
                 [:span [:a {:href (result :href)} (result :title)]
-                 " - "
-                 (let [price (result :price)]
-                   (if (= price -1)
-                     "Price not available"
-                     (str "$" (format "%,.2f" price))))]]))
+                 [:span.float-right
+                  (let [price (result :price)]
+                    (if (= price -1)
+                      "Price not available"
+                      (str "$" (format "%,.2f" price))))]]]))
 
 (defn render-results [results]
   "Renders search results to HTML"
