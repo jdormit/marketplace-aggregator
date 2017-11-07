@@ -1,6 +1,7 @@
 (ns marketplace-aggregator.handler
   (:require [compojure.core :refer :all]
             [compojure.route :as route]
+            [clojure.string :as string]
             [marketplace-aggregator.datasources :as sources]
             [marketplace-aggregator.views :as views]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]))
@@ -12,9 +13,10 @@
 
 (defroutes app-routes
   (GET "/" [] (views/index))
-  (GET "/search" [query location]
-       (let [results (search query location)]
-         (views/search-results query location results)))
+  (GET "/search" [query location sort]
+       (let [results (search query location)
+             sort-key (if (string/blank? sort) :price (keyword sort))]
+         (views/search-results query location results sort-key)))
   (route/resources "/")
   (route/not-found "Not Found"))
 

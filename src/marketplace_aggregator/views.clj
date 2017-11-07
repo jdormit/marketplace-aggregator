@@ -50,10 +50,11 @@
                       "Price not available"
                       (str "$" (format "%,.2f" price))))]]]))
 
-(defn render-results [results]
+(defn render-results [results sort-key]
   "Renders search results to HTML"
   (hiccup/html [:ul.list-group.list-group-flush
-                (map result->html results)]))
+                (map result->html
+                     (sort-by sort-key results))]))
 
 (defn results-header [query location result-count]
   (hiccup/html [:div.card-header
@@ -68,11 +69,11 @@
                   (map string/capitalize
                        (string/split location #" "))))]))
 
-(defn results-list [query location results]
+(defn results-list [query location results sort-key]
   (hiccup/html
    [:div.card
     (results-header query location (count results))
-    (render-results results)]))
+    (render-results results sort-key)]))
 
 (defn page-header []
   (hiccup/html [:h1.display-2
@@ -82,10 +83,10 @@
                               (page-header)
                               (search-form)))
 
-(defn search-results [query location results]
+(defn search-results [query location results sort-key]
   (page-template
    (str "Search results: " query)
    (page-header)
    (search-form)
    (hiccup/html [:br])
-   (results-list query location results)))
+   (results-list query location results sort-key)))
