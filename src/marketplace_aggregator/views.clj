@@ -21,20 +21,27 @@
       {:method "GET"
        :action "search"}
       [:div.form-row
-       [:div.form-group.col-6
+       [:div.form-group.col-5
         [:label {:for "query"} "Query"]
         [:input#query.form-control
          {:type "text"
           :name "query"
           :required "true"
           :placeholder "What are you looking for?"}]]
-       [:div.form-group.col-6
+       [:div.form-group.col-5
         [:label {:for "location"} "Location"]
         [:select#location.form-control.custom-select
          {:name "location"
-          :require "true"}
+          :required "true"}
          [:option {:value "boston"} "Boston"]
          [:option {:value "salt lake city"} "Salt Lake City"]]]
+       [:div.form-group.col-2
+        [:label {:for "sort"} "Sort By"]
+        [:select#sort.form-control.custom-select
+         {:name "sort"}
+         [:option {:value "price" :selected "true"} "Price"]
+         [:option {:value "source"} "Marketplace"]
+         [:option {:value "title"} "Alphabetical"]]]
        [:div.col-12
         [:input.btn.btn-primary
          {:type "submit" :value "Search"}]]]]]]))
