@@ -113,7 +113,7 @@
 
 (defn page-header []
   (hiccup/html [:h1.display-2
-                "ComparisonShopper.io"]))
+                "Comparison Shopper"]))
 
 (defn index [] (page-template "Search"
                               (page-header)
