@@ -97,8 +97,9 @@
                          (fn [result]
                            [:tr
                             [:td
+                             {:data-sort (:price result)}
                              (if (= -1 (:price result))
-                               ""
+                               "Price not available"
                                (str "$" (format "%,.2f" (:price result))))]
                             [:td [:a {:href (:href result)} (:title result)]]
                             [:td (:source result)]])
