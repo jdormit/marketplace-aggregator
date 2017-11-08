@@ -5,3 +5,7 @@
    :href href
    :price price
    :source source})
+
+(defn make-location [city state]
+  {:city city
+   :state state})
