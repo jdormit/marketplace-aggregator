@@ -8,7 +8,12 @@
                [:title title]
                [:meta {:name "viewport"
                        :content "width=device-width, initial-scale=1, shrink-to-fit=no"}]
-               (page/include-css "/css/bootstrap.min.css")]
+               (page/include-js "/js/jquery.min.js")
+               (page/include-js "/js/jquery.dataTables.min.js")
+               (page/include-js "/js/dataTables.bootstrap4.min.js")
+               (page/include-js "/js/script.js")
+               (page/include-css "/css/bootstrap.min.css")
+               (page/include-css "/css/dataTables.bootstrap4.min.css")]
               [:body
                [:div.container (apply str body)]]))
 
@@ -64,7 +69,7 @@
                        (string/split location #" "))))]))
 
 (defn results-table [results]
-  (hiccup/html [:table.table
+  (hiccup/html [:table#results-table.table
                 [:thead.thead-light [:tr
                                      [:th "Price"]
                                      [:th "Item"]
@@ -72,7 +77,7 @@
                 [:tbody (map
                          (fn [result]
                            [:tr
-                            [:td (if (= -1 (:price result)) "Price not available" (str "$" (format "%,.2f" (:price result))))]
+                            [:td (if (= -1 (:price result)) "" (str "$" (format "%,.2f" (:price result))))]
                             [:td [:a {:href (:href result)} (:title result)]]
                             [:td (:source result)]])
                          results)]]))
