@@ -40,6 +40,25 @@
           :required "true"}
          [:option {:value "boston"} "Boston"]
          [:option {:value "salt lake city"} "Salt Lake City"]]]
+       [:div.form-group.col-12
+        [:label "Marketplaces"]
+        [:div.form-group
+         [:div.form-check.form-check-inline
+          [:label.form-check-label
+           [:input.form-check-input
+            {:type "checkbox"
+             :name "marketplaces"
+             :value "craigslist"
+             :checked "true"}]
+           "Craigslist"]]
+         [:div.form-check.form-check-inline
+          [:label.form-check-label
+           [:input.form-check-input
+            {:type "checkbox"
+             :name "marketplaces"
+             :value "ebay"
+             :checked "true"}]
+           "EBay"]]]]
        [:div.col-12
         [:input.btn.btn-primary
          {:type "submit" :value "Search"}]]]]]]))

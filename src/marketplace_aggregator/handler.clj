@@ -7,18 +7,21 @@
             [marketplace-aggregator.locations :as locations]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]))
 
-(defn search [query location]
+(defn search [query marketplaces location]
   "Searches for the query across marketplaces and returns a list of results"
-  (let [craigslist-results (sources/search-craigslist query (:city location))
-        ebay-results (sources/search-ebay query location)]
-    (concat craigslist-results
-            ebay-results)))
+  (concat (if (some #{"craigslist"} marketplaces)
+            (sources/search-craigslist query (:city location))
+            nil)
+          (if (some #{"ebay"} marketplaces)
+            (sources/search-ebay query location)
+            nil)))
 
 (defroutes app-routes
   (GET "/" [] (views/index))
-  (GET "/search" [query location]
+  (GET "/search" [query location marketplaces]
        (let [location-map (locations/locations location)
-             results (search query location-map)]
+             marketplaces (if (vector? marketplaces) marketplaces [marketplaces])
+             results (search query marketplaces location-map)]
          (views/search-results query location results)))
   (route/resources "/")
   (route/not-found "Not Found"))
