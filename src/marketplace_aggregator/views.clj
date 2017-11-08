@@ -26,14 +26,14 @@
       {:method "GET"
        :action "search"}
       [:div.form-row
-       [:div.form-group.col-6
+       [:div.form-group.col-sm-6
         [:label {:for "query"} "Query"]
         [:input#query.form-control
          {:type "text"
           :name "query"
           :required "true"
           :placeholder "What are you looking for?"}]]
-       [:div.form-group.col-6
+       [:div.form-group.col-sm-6
         [:label {:for "location"} "Location"]
         [:select#location.form-control.custom-select
          {:name "location"
@@ -88,7 +88,7 @@
                        (string/split location #" "))))]))
 
 (defn results-table [results]
-  (hiccup/html [:table#results-table.table
+  (hiccup/html [:table#results-table.table.table-responsive
                 [:thead.thead-light [:tr
                                      [:th "Price"]
                                      [:th "Item"]
