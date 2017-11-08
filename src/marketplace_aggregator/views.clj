@@ -77,7 +77,10 @@
                 [:tbody (map
                          (fn [result]
                            [:tr
-                            [:td (if (= -1 (:price result)) "" (str "$" (format "%,.2f" (:price result))))]
+                            [:td
+                             (if (= -1 (:price result))
+                               ""
+                               (str "$" (format "%,.2f" (:price result))))]
                             [:td [:a {:href (:href result)} (:title result)]]
                             [:td (:source result)]])
                          results)]]))
