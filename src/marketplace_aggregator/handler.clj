@@ -16,11 +16,10 @@
 
 (defroutes app-routes
   (GET "/" [] (views/index))
-  (GET "/search" [query location sort]
+  (GET "/search" [query location]
        (let [location-map (locations/locations location)
-             results (search query location-map)
-             sort-key (if (string/blank? sort) :price (keyword sort))]
-         (views/search-results query location results sort-key)))
+             results (search query location-map)]
+         (views/search-results query location results)))
   (route/resources "/")
   (route/not-found "Not Found"))
 

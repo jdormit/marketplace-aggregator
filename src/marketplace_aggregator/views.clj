@@ -21,27 +21,20 @@
       {:method "GET"
        :action "search"}
       [:div.form-row
-       [:div.form-group.col-5
+       [:div.form-group.col-6
         [:label {:for "query"} "Query"]
         [:input#query.form-control
          {:type "text"
           :name "query"
           :required "true"
           :placeholder "What are you looking for?"}]]
-       [:div.form-group.col-5
+       [:div.form-group.col-6
         [:label {:for "location"} "Location"]
         [:select#location.form-control.custom-select
          {:name "location"
           :required "true"}
          [:option {:value "boston"} "Boston"]
          [:option {:value "salt lake city"} "Salt Lake City"]]]
-       [:div.form-group.col-2
-        [:label {:for "sort"} "Sort By"]
-        [:select#sort.form-control.custom-select
-         {:name "sort"}
-         [:option {:value "price" :selected "true"} "Price"]
-         [:option {:value "source"} "Marketplace"]
-         [:option {:value "title"} "Alphabetical"]]]
        [:div.col-12
         [:input.btn.btn-primary
          {:type "submit" :value "Search"}]]]]]]))
@@ -57,12 +50,6 @@
                       "Price not available"
                       (str "$" (format "%,.2f" price))))]]]))
 
-(defn render-results [results sort-key]
-  "Renders search results to HTML"
-  (hiccup/html [:ul.list-group.list-group-flush
-                (map result->html
-                     (sort-by sort-key results))]))
-
 (defn results-header [query location result-count]
   (hiccup/html [:div.card-header
                 (str
@@ -76,11 +63,25 @@
                   (map string/capitalize
                        (string/split location #" "))))]))
 
-(defn results-list [query location results sort-key]
+(defn results-table [results]
+  (hiccup/html [:table.table
+                [:thead.thead-light [:tr
+                                     [:th "Price"]
+                                     [:th "Item"]
+                                     [:th "Marketplace"]]]
+                [:tbody (map
+                         (fn [result]
+                           [:tr
+                            [:td (if (= -1 (:price result)) "Price not available" (str "$" (format "%,.2f" (:price result))))]
+                            [:td [:a {:href (:href result)} (:title result)]]
+                            [:td (:source result)]])
+                         results)]]))
+
+(defn results-list [query location results]
   (hiccup/html
    [:div.card
     (results-header query location (count results))
-    (render-results results sort-key)]))
+    [:div.card-body (results-table results)]]))
 
 (defn page-header []
   (hiccup/html [:h1.display-2
@@ -90,10 +91,10 @@
                               (page-header)
                               (search-form)))
 
-(defn search-results [query location results sort-key]
+(defn search-results [query location results]
   (page-template
    (str "Search results: " query)
    (page-header)
    (search-form)
    (hiccup/html [:br])
-   (results-list query location results sort-key)))
+   (results-list query location results)))
