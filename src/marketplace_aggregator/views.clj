@@ -88,22 +88,21 @@
                        (string/split location #" "))))]))
 
 (defn results-table [results]
-  (hiccup/html [:table#results-table.table.table-responsive
-                [:thead.thead-light [:tr
-                                     [:th "Price"]
-                                     [:th "Item"]
-                                     [:th "Marketplace"]]]
-                [:tbody (map
-                         (fn [result]
-                           [:tr
-                            [:td
-                             {:data-sort (:price result)}
-                             (if (= -1 (:price result))
-                               "Price not available"
-                               (str "$" (format "%,.2f" (:price result))))]
-                            [:td [:a {:href (:href result)} (:title result)]]
-                            [:td (:source result)]])
-                         results)]]))
+  (let [results (filter #(not= -1 (:price %)) results)]
+    (hiccup/html [:table#results-table.table.table-responsive
+                  [:thead.thead-light [:tr
+                                       [:th "Price"]
+                                       [:th "Item"]
+                                       [:th "Marketplace"]]]
+                  [:tbody (map
+                           (fn [result]
+                             [:tr
+                              [:td
+                               {:data-sort (:price result)}
+                               (str "$" (format "%,.2f" (:price result)))]
+                              [:td [:a {:href (:href result)} (:title result)]]
+                              [:td (:source result)]])
+                           results)]])))
 
 (defn results-list [query location results]
   (hiccup/html
