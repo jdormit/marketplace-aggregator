@@ -112,7 +112,7 @@
     [:div.card-body (results-table results)]]))
 
 (defn page-header []
-  (hiccup/html [:h1.display-2
+  (hiccup/html [:h1.display-3
                 "Comparison Shopper"]))
 
 (defn index [] (page-template "Search"
