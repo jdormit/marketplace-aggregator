@@ -3,4 +3,4 @@
 
 (def amazon-access-key (env :amazon-access-key))
 (def amazon-secret-key (env :amazon-secret-key))
-(def amazon-affiliate-id "comparison0fa-20")
+(def amazon-affiliate-id (env :amazon-affiliate-id))
