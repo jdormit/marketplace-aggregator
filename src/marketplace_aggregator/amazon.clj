@@ -20,7 +20,7 @@
         secret-key (SecretKeySpec. (.getBytes key) "HmacSHA256")]
     (do (.init mac secret-key)
         (Base64/encodeBase64String
-         (.doFinal (.getBytes data))))))
+         (.doFinal mac (.getBytes data))))))
 
 (defn gen-signature [keywords timestamp]
   (let [canonical-string (-> ["Service=AWSECommerceServer"
