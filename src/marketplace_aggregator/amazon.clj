@@ -1,18 +1,24 @@
 (ns marketplace-aggregator.amazon
-  (:require [environ.core :refer [env]])
-  (:import [java.util.Date
-            java.text.SimpleDateFormat
-            java.net.URLEncoder
-            javax.crypto.Mac
-            javax.crypto.spec.SecretKeySpec
-            org.apache.commons.codec.binary.Base64]))
+  (:require [clojure.string :as string]
+            [environ.core :refer [env]])
+  (:import (java.util Date)
+           (java.text SimpleDateFormat)
+           (java.net URLEncoder)
+           (javax.crypto Mac)
+           (javax.crypto.spec SecretKeySpec)
+           (org.apache.commons.codec.binary Base64)))
 
 (def amazon-access-key (env :amazon-access-key))
 (def amazon-secret-key (env :amazon-secret-key))
 (def amazon-affiliate-id (env :amazon-affiliate-id))
 
+(defn encode [str]
+  (-> str
+      (URLEncoder/encode "ISO-8859-1")
+      (string/replace #":" "%3B")))
+
 (defn now-timestamp []
-  (let [formatter (SimpleDateFormat. "YYYY-MM-DDThh:mm:ssZ")]
+  (let [formatter (SimpleDateFormat. "YYYY-MM-DD'T'hh:mm:ssZ")]
     (.format formatter (Date.))))
 
 (defn hmac-hash [key data]
@@ -23,15 +29,15 @@
          (.doFinal mac (.getBytes data))))))
 
 (defn gen-signature [keywords timestamp]
-  (let [canonical-string (-> ["Service=AWSECommerceServer"
+  (let [canonical-string (->> ["Service=AWSECommerceServer"
                               (str "AWSAccessKeyId=" amazon-access-key)
                               (str "AssociateTag=" amazon-affiliate-id)
                               "Operation=ItemSearch"
-                              (str "Keywords=" (URLEncoder/encode keywords))
+                              (str "Keywords=" (encode keywords))
                               "SearchIndex=All"
-                              (str "Timestamp=" timestamp)]
+                              (str "Timestamp=" (encode timestamp))]
                              (sort)
-                             (join "&"))]
+                             (string/join "&"))]
     (hmac-hash amazon-secret-key
                (str "GET\nwebservices.amazon.com\n/onca/xml\n"
                     canonical-string))))
@@ -43,7 +49,7 @@
         "&AWSAccessKeyId=" amazon-access-key
         "&AssociateTag=" amazon-affiliate-id
         "&Operation=ItemSearch"
-        "&Keywords=" (URLEncoder/encode keywords)
+        "&Keywords=" (encode keywords)
         "&SearchIndex=All"
         "&Timestamp=" timestamp
-        "&Signature=" (gen-signature keywords timestamp))))
+        "&Signature=" (encode (gen-signature keywords timestamp)))))
