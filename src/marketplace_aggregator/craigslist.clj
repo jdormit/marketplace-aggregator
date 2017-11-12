@@ -731,20 +731,22 @@
                          (URLEncoder/encode query)
                          "&sort=rel")))))
 
-(defn parse-craigslist-results [results]
+(defn parse-craigslist-results [results query]
   (let [result-rows (html/select results [:li.result-row])]
-    (map (fn [row]
-           (models/make-result
-            (first (:content (first (html/select row [:a.result-title]))))
-            (get-in (first (html/select row [:a.result-title])) [:attrs :href])
-            (let [price
-                  (apply str
-                         (rest (first (:content (first (html/select row [:span.result-price]))))))]
-              (if (= price "")
-                -1
-                (Float/parseFloat price)))
-            "Craigslist"))
-         result-rows)))
+    (filter
+     #(string/includes? (:title %) query)
+     (map (fn [row]
+            (models/make-result
+             (first (:content (first (html/select row [:a.result-title]))))
+             (get-in (first (html/select row [:a.result-title])) [:attrs :href])
+             (let [price
+                   (apply str
+                          (rest (first (:content (first (html/select row [:span.result-price]))))))]
+               (if (= price "")
+                 -1
+                 (Float/parseFloat price)))
+             "Craigslist"))
+          result-rows))))
 
 (defn search [query location]
   (parse-craigslist-results (fetch-craigslist-results query location)))
