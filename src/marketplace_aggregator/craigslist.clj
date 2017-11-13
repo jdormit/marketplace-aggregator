@@ -749,5 +749,5 @@
           result-rows))))
 
 (defn search [query location]
-  (parse-craigslist-results (fetch-craigslist-results query location)))
+  (parse-craigslist-results (fetch-craigslist-results query location) query))
 
