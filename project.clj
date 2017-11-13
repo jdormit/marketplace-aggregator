@@ -4,6 +4,7 @@
   :min-lein-version "2.0.0"
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/data.json "0.2.6"]
+                 [org.clojure/data.xml "0.0.8"]
                  [org.clojure/core.cache "0.6.5"]
                  [compojure "1.5.1"]
                  [environ "1.1.0"]

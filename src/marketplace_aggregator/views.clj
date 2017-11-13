@@ -17,6 +17,16 @@
               [:body
                [:div.container (apply str body)]]))
 
+(defn source-checkbox [name value]
+  [:div.form-check.form-check-inline
+   [:label.form-check-label
+    [:input.form-check-input
+     {:type "checkbox"
+      :name "marketplaces"
+      :value value
+      :checked "true"}]
+    name]])
+
 (defn search-form []
   (hiccup/html
    [:div.card
@@ -43,22 +53,9 @@
        [:div.form-group.col-12
         [:label "Marketplaces"]
         [:div.form-group
-         [:div.form-check.form-check-inline
-          [:label.form-check-label
-           [:input.form-check-input
-            {:type "checkbox"
-             :name "marketplaces"
-             :value "craigslist"
-             :checked "true"}]
-           "Craigslist"]]
-         [:div.form-check.form-check-inline
-          [:label.form-check-label
-           [:input.form-check-input
-            {:type "checkbox"
-             :name "marketplaces"
-             :value "ebay"
-             :checked "true"}]
-           "EBay"]]]]
+         (source-checkbox "Craigslist" "craigslist")
+         (source-checkbox "EBay" "ebay")
+         (source-checkbox "Amazon" "amazon")]]
        [:div.col-12
         [:input.btn.btn-primary
          {:type "submit" :value "Search"}]]]]]]))

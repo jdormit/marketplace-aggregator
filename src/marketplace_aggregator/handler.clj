@@ -14,6 +14,9 @@
             nil)
           (if (some #{"ebay"} marketplaces)
             (sources/search-ebay query location)
+            nil)
+          (if (some #{"amazon"} marketplaces)
+            (sources/search-amazon query location)
             nil)))
 
 (defroutes app-routes
