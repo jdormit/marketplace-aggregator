@@ -1,13 +1,18 @@
 (ns marketplace-aggregator.views
   (:require [clojure.string :as string]
+            [environ.core :refer [env]]
             [hiccup.core :as hiccup]
             [hiccup.page :as page]))
+
+(def ebay-campaign-id (env :ebay-campaign-id))
 
 (defn page-template [title & body]
   (page/html5 [:head
                [:title title]
                [:meta {:name "viewport"
                        :content "width=device-width, initial-scale=1, shrink-to-fit=no"}]
+               [:script (str "window._epn = {campaign:" ebay-campaign-id "};")]
+               (page/include-js "/js/epn-smart-tools.js")
                (page/include-js "/js/jquery.min.js")
                (page/include-js "/js/jquery.dataTables.min.js")
                (page/include-js "/js/dataTables.bootstrap4.min.js")
