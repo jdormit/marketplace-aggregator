@@ -5,19 +5,22 @@
             [marketplace-aggregator.datasources :as sources]
             [marketplace-aggregator.views :as views]
             [marketplace-aggregator.locations :as locations]
+            [marketplace-aggregator.constants :as constants]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]))
 
 (defn search [query marketplaces location]
   "Searches for the query across marketplaces and returns a list of results"
-  (concat (if (some #{"craigslist"} marketplaces)
-            (sources/search-craigslist query (:city location))
-            nil)
-          (if (some #{"ebay"} marketplaces)
-            (sources/search-ebay query location)
-            nil)
-          (if (some #{"amazon"} marketplaces)
-            (sources/search-amazon query location)
-            nil)))
+  (sort-by :price
+           (take constants/num-results
+                 (concat (if (some #{"craigslist"} marketplaces)
+                           (sources/search-craigslist query (:city location))
+                           nil)
+                         (if (some #{"ebay"} marketplaces)
+                           (sources/search-ebay query location)
+                           nil)
+                         (if (some #{"amazon"} marketplaces)
+                           (sources/search-amazon query location)
+                           nil)))))
 
 (defroutes app-routes
   (GET "/" [] (views/index))

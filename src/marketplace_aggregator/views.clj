@@ -2,7 +2,8 @@
   (:require [clojure.string :as string]
             [environ.core :refer [env]]
             [hiccup.core :as hiccup]
-            [hiccup.page :as page]))
+            [hiccup.page :as page]
+            [marketplace-aggregator.constants :as constants]))
 
 (def ebay-campaign-id (env :ebay-campaign-id))
 
@@ -66,28 +67,29 @@
          {:type "submit" :value "Search"}]]]]]]))
 
 (defn result->html [result]
-  (hiccup/html [:li.list-group-item
-                [:span.badge.badge-pill.badge-light (result :source)]
-                [:span " "]
-                [:span [:a {:href (result :href)} (result :title)]
+  (hiccup/html [:div.card
+                [:div.card-body
+                 [:span.badge.badge-pill.badge-light (result :source)]
+                 [:span " "]
+                 [:span [:a {:href (result :href)} (result :title)]]
                  [:span.float-right
                   (let [price (result :price)]
                     (if (= price -1)
                       "Price not available"
                       (str "$" (format "%,.2f" price))))]]]))
 
-(defn results-header [query location result-count]
-  (hiccup/html [:div.card-header
-                (str
-                 result-count
-                 (if (= 1 result-count) " result" " results")
-                 " found for \""
-                 query
-                 "\" in "
-                 (string/join
-                  " "
-                  (map string/capitalize
-                       (string/split location #" "))))]))
+(defn results-header [query location]
+  (hiccup/html [:p.lead.font-weight-bold.mt-3
+                (str "Here are the "
+                     constants/num-results
+                     " best prices we found for \""
+                     query
+                     "\" in "
+                     (string/join
+                      " "
+                      (map string/capitalize
+                           (string/split location #" ")))
+                     ":")]))
 
 (defn results-table [results]
   (let [results (filter #(not= -1 (:price %)) results)]
@@ -107,23 +109,38 @@
                            results)]])))
 
 (defn results-list [query location results]
-  (hiccup/html
-   [:div.card
-    (results-header query location (count results))
-    [:div.card-body (results-table results)]]))
+  (hiccup/html (map result->html results)))
 
 (defn page-header []
   (hiccup/html [:h1.display-3
                 "Comparison Shopper"]))
 
+(defn info-card [title body]
+  (hiccup/html [:div.card
+                [:div.card-body
+                 [:h4.card-title title]
+                 [:p.card-text body]]]))
+
+(defn how-it-works []
+  (hiccup/html [:h1.mt-2.mb-2 "How It Works"]
+               [:div.card-deck
+                (info-card "Search"
+                           "Input the name of the thing you want to buy. The more specific your search term, the better the results will be - for example, \"Casio CDP-100\" instead of \"keyboard\".")
+                (info-card "Browse"
+                           (str "Our industrious bargain-hunting robots will scour the web for the best deals for your item. You'll get a list of the "
+                                constants/num-results " best prices."))
+                (info-card "Save"
+                           "Let Comparison Shopper take the stress out of shopping online! We find the best deals so that you don't have to, saving you time and money!")]))
+
 (defn index [] (page-template "Search"
                               (page-header)
-                              (search-form)))
+                              (search-form)
+                              (how-it-works)))
 
 (defn search-results [query location results]
   (page-template
    (str "Search results: " query)
    (page-header)
    (search-form)
-   (hiccup/html [:br])
+   (results-header query location)
    (results-list query location results)))
