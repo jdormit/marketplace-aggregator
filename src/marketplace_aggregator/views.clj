@@ -25,8 +25,13 @@
 (defn page-template [title & body]
   (page/html5 [:head
                [:title title]
+               [:meta {:charset "UTF-8"}]
                [:meta {:name "viewport"
-                       :content "width=device-width, initial-scale=1, shrink-to-fit=no"}]
+                       :content "width=device-width, initial-scale=1.0, shrink-to-fit=no"}]
+               [:meta {:name "description"
+                       :content "Find the best price for any product on the web"}]
+               [:meta {:name "keywords"
+                       :content "comparison, comparison shopping, price, best price, price search, comparison search, search"}]
                [:link {:rel "icon"
                        :type "image/svg"
                        :href "/images/cart.svg"}]
