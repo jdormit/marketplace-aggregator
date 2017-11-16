@@ -180,11 +180,11 @@
 
 (defn page-header []
   (hiccup/html [:div.row.d-flex.align-items-center
-                [:div.col-1
+                [:div.col-4.col-lg-1.d-none.d-sm-block
                  [:img.img-fluid
                   {:src "/images/cart.svg"
                    :alt "shopping cart"}]]
-                [:div.col-11
+                [:div.col-8.col-lg-11
                  [:h1.display-3
                   "Comparison Shopper"]]]
                [:div.row
