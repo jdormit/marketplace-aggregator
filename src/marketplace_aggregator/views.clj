@@ -27,6 +27,9 @@
                [:title title]
                [:meta {:name "viewport"
                        :content "width=device-width, initial-scale=1, shrink-to-fit=no"}]
+               [:link {:rel "icon"
+                       :type "image/svg"
+                       :href "/images/cart.svg"}]
                (google-analytics google-analytics-id)
                [:script (str "window._epn = {campaign:" ebay-campaign-id "};")]
                (page/include-js "/js/epn-smart-tools.js")
@@ -176,10 +179,17 @@
   (hiccup/html (map result->html results)))
 
 (defn page-header []
-  (hiccup/html [:h1.display-3
-                "Comparison Shopper"]
-               [:p.lead.text-muted
-                "Find the best deals on the web"]))
+  (hiccup/html [:div.row.d-flex.align-items-center
+                [:div.col-1
+                 [:img.img-fluid
+                  {:src "/images/cart.svg"
+                   :alt "shopping cart"}]]
+                [:div.col-11
+                 [:h1.display-3
+                  "Comparison Shopper"]]]
+               [:div.row
+                [:p.lead.text-muted.col-12
+                 "Find the best deals on the web"]]))
 
 (defn index [] (page-template "Comparison Shopper"
                               (page-header)
