@@ -722,7 +722,7 @@
                 "sheboygan" "https://sheboygan.craigslist.org/"})
 
 (defn get-regional-site [location]
-  (get sites-map (string/lower-case location) "https://craigslist.org/"))
+  (get sites-map (:craigslist-key location) "https://craigslist.org/"))
 
 (defn fetch-craigslist-results [query location]
   (html/html-snippet

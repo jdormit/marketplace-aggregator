@@ -11,6 +11,7 @@
                  [enlive "1.1.6"]
                  [hiccup "1.0.5"]
                  [clj-http "3.7.0"]
+                 [javax.mail/mail "1.4.1"]
                  [ring/ring-defaults "0.2.1"]]
   :plugins [[lein-ring "0.9.7"]
             [lein-environ "1.1.0"]]

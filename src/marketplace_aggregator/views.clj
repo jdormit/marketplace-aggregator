@@ -3,7 +3,10 @@
             [environ.core :refer [env]]
             [hiccup.core :as hiccup]
             [hiccup.page :as page]
-            [marketplace-aggregator.constants :as constants]))
+            [ring.util.anti-forgery :as csrf]
+            [marketplace-aggregator.constants :as constants]
+            [marketplace-aggregator.locations :as locations])
+  (:import [java.net URLEncoder]))
 
 (def ebay-campaign-id (env :ebay-campaign-id))
 
@@ -33,11 +36,48 @@
       :checked "true"}]
     name]])
 
+(defn feedback-form
+  ([feedback subject]
+   (hiccup/html
+    [:div.card
+     [:div.card-body
+      [:h2.card-title "Submit feedback"]
+      [:form {:method "POST"
+              :action "feedback"}
+       [:div.form-group
+        [:label {:for "email"} "Email Address"]
+        [:input#email.form-control
+         {:type "email"
+          :name "email"
+          :required "true"
+          :placeholder "you@example.com"}]]
+       [:div.form-group
+        [:label {:for "subject"} "Subject"]
+        [:input#subject.form-control
+         {:type "text"
+          :name "subject"
+          :value subject
+          :placeholder "Subject"
+          :required "true"}]]
+       [:div.form-group
+        [:label {:for "feedback"} "Feedback"]
+        [:textarea#feedback.form-control
+         {:name "feedback"
+          :required "true"
+          :autofocus "autofocus"
+          :placeholder "Your feedback"}
+         feedback]]
+       (csrf/anti-forgery-field)
+       [:input.btn.btn-primary
+        {:type "submit"
+         :value "Submit"}]]]]))
+  ([] (feedback-form "" "Comparison Shopper Feedback")))
+
 (defn search-form []
   (hiccup/html
    [:div.card
     [:div.card-body
-     [:h2.card-title "Find an item"]
+     [:h2.card-title "Find a product"]
      [:form
       {:method "GET"
        :action "search"}
@@ -48,14 +88,24 @@
          {:type "text"
           :name "query"
           :required "true"
-          :placeholder "What are you looking for?"}]]
+          :placeholder "Product Name"}]]
        [:div.form-group.col-sm-6
         [:label {:for "location"} "Location"]
+        [:span.float-right
+         [:a
+          {:href (str "feedback?feedback="
+                      (URLEncoder/encode
+                       "Please add my city! I live in:")
+                      "&subject="
+                      (URLEncoder/encode "Add City Request"))}
+          "Don't see your city?"]]
         [:select#location.form-control.custom-select
          {:name "location"
           :required "true"}
-         [:option {:value "boston"} "Boston"]
-         [:option {:value "salt lake city"} "Salt Lake City"]]]
+         (map (fn [loc]
+                [:option {:value (name (first loc))}
+                 (locations/display-location (second loc))])
+              (sort-by #(:city (second %)) locations/locations))]]
        [:div.form-group.col-12
         [:label "Marketplaces"]
         [:div.form-group
@@ -64,7 +114,8 @@
          (source-checkbox "Amazon" "amazon")]]
        [:div.col-12
         [:input.btn.btn-primary
-         {:type "submit" :value "Search"}]]]]]]))
+         {:type "submit" :value "Search"}]
+        [:a.float-right.mr-3 {:href "/feedback"} "Submit feedback / Report a bug"]]]]]]))
 
 (defn result->html [result]
   (hiccup/html [:div.card
@@ -113,34 +164,32 @@
 
 (defn page-header []
   (hiccup/html [:h1.display-3
-                "Comparison Shopper"]))
+                "Comparison Shopper"]
+               [:p.lead.text-muted
+                "Find the best deals on the web"]))
 
-(defn info-card [title body]
-  (hiccup/html [:div.card
-                [:div.card-body
-                 [:h4.card-title title]
-                 [:p.card-text body]]]))
-
-(defn how-it-works []
-  (hiccup/html [:h1.mt-2.mb-2 "How It Works"]
-               [:div.card-deck
-                (info-card "Search"
-                           "Input the name of the thing you want to buy. The more specific your search term, the better the results will be - for example, \"Casio CDP-100\" instead of \"keyboard\".")
-                (info-card "Browse"
-                           (str "Our industrious bargain-hunting robots will scour the web for the best deals for your item. You'll get a list of the "
-                                constants/num-results " best prices."))
-                (info-card "Save"
-                           "Let Comparison Shopper take the stress out of shopping online! We find the best deals so that you don't have to, saving you time and money!")]))
-
-(defn index [] (page-template "Search"
+(defn index [] (page-template "Comparison Shopper"
                               (page-header)
-                              (search-form)
-                              (how-it-works)))
+                              (search-form)))
 
 (defn search-results [query location results]
   (page-template
-   (str "Search results: " query)
+   (str "Comparison Shopper | " query)
    (page-header)
    (search-form)
    (results-header query location)
    (results-list query location results)))
+
+(defn feedback
+  ([feedback subject] (page-template
+                       "Comparison Shopper | Feedback"
+                       (page-header)
+                       (feedback-form feedback subject)))
+  ([] (feedback "" "Comparison Shopper Feedback")))
+
+(defn thanks []
+  (page-template "Comparison Shopper | Thanks!"
+                 (hiccup/html [:div.jumbotron
+                               [:h1.display-3 "Thanks for your feedback!"]
+                               [:p.lead "We appreciate that you took the time to help us out."]
+                               [:a {:href "/"} "Return to Comparison Shopper"]])))

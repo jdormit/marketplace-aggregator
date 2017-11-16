@@ -6,6 +6,7 @@
    :price price
    :source source})
 
-(defn make-location [city state]
+(defn make-location [city state craigslist-key]
   {:city city
-   :state state})
+   :state state
+   :craigslist-key craigslist-key})

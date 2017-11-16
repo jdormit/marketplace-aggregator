@@ -5,7 +5,6 @@
             [marketplace-aggregator.zipcode :as zipcode])
   (:import [java.net URLEncoder]))
 
-;; TODO add location data via zip code
 (defn fetch-ebay-results [query location]
   (let [zip (first (zipcode/lookup location))]
     (json/read-str
