@@ -9,12 +9,25 @@
   (:import [java.net URLEncoder]))
 
 (def ebay-campaign-id (env :ebay-campaign-id))
+(def google-analytics-id (env :google-analytics-id))
+
+(defn google-analytics [id]
+  (hiccup/html
+   [:script {:async "async"
+             :src (str "https://www.googletagmanager.com/gtag/js?id=" id)}]
+   [:script (str "window.dataLayer = window.dataLayer || [];"
+                 "function gtag(){dataLayer.push(arguments);}"
+                 "gtag('js', new Date());"
+                 "gtag('config', '"
+                 id
+                 "');")]))
 
 (defn page-template [title & body]
   (page/html5 [:head
                [:title title]
                [:meta {:name "viewport"
                        :content "width=device-width, initial-scale=1, shrink-to-fit=no"}]
+               (google-analytics google-analytics-id)
                [:script (str "window._epn = {campaign:" ebay-campaign-id "};")]
                (page/include-js "/js/epn-smart-tools.js")
                (page/include-js "/js/jquery.min.js")
