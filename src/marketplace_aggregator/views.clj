@@ -128,10 +128,13 @@
          (source-checkbox "Craigslist" "craigslist")
          (source-checkbox "EBay" "ebay")
          (source-checkbox "Amazon" "amazon")]]
-       [:div.col-12
+       [:div.form-group.col-12.col-md-6
         [:input.btn.btn-primary
-         {:type "submit" :value "Search"}]
-        [:a.float-right.mr-3 {:href "/feedback"} "Submit feedback / Report a bug"]]]]]]))
+         {:type "submit" :value "Search"}]]
+       [:div.col-12.col-md-6
+        [:a.float-md-right.mr-3
+         {:href "/feedback"}
+         "Submit feedback / Report a bug"]]]]]]))
 
 (defn result->html [result]
   (hiccup/html [:div.card
