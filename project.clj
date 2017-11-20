@@ -15,7 +15,7 @@
                  [ring/ring-defaults "0.2.1"]]
   :plugins [[lein-ring "0.9.7"]
             [lein-environ "1.1.0"]]
-  :ring {:handler marketplace-aggregator.handler/app}
+  :ring {:handler marketplace-aggregator.server/app}
   :uberjar-name "marketplace-aggregator.jar"
   :profiles
   {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]

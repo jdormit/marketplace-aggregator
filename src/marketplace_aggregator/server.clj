@@ -1,4 +1,4 @@
-(ns marketplace-aggregator.handler
+(ns marketplace-aggregator.server
   (:require [compojure.core :refer :all]
             [compojure.route :as route]
             [clojure.string :as string]
