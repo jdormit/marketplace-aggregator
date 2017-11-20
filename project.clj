@@ -12,10 +12,13 @@
                  [hiccup "1.0.5"]
                  [clj-http "3.7.0"]
                  [javax.mail/mail "1.4.1"]
-                 [ring/ring-defaults "0.2.1"]]
+                 [ring/ring-defaults "0.2.1"]
+                 [ring/ring-core "1.6.3"]
+                 [ring/ring-jetty-adapter "1.6.3"]]
   :plugins [[lein-ring "0.9.7"]
             [lein-environ "1.1.0"]]
   :ring {:handler marketplace-aggregator.server/app}
+  :main marketplace-aggregator.server
   :uberjar-name "marketplace-aggregator.jar"
   :profiles
   {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]

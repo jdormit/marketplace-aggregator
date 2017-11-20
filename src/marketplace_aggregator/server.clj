@@ -8,6 +8,7 @@
             [marketplace-aggregator.locations :as locations]
             [marketplace-aggregator.constants :as constants]
             [marketplace-aggregator.gmail :as gmail]
+            [ring.adapter.jetty :as jetty]
             [ring.util.response :as response]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]))
 
@@ -51,3 +52,7 @@
 
 (def app
   (wrap-defaults app-routes site-defaults))
+
+(defn -main [& args]
+  (jetty/run-jetty app
+                   {:port 3000}))
