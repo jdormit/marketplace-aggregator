@@ -101,7 +101,7 @@
    [:div.card
     [:div.card-body
      [:h2.card-title "Find a product"]
-     [:form
+     [:form#search-form
       {:method "GET"
        :action "search"}
       [:div.form-row
