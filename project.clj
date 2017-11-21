@@ -20,9 +20,10 @@
   :plugins [[lein-ring "0.9.7"]
             [lein-environ "1.1.0"]
             [lein-cljsbuild "1.1.7"]]
+  :hooks [leiningen.cljsbuild]
   :cljsbuild {:builds [{:source-paths ["src_webapp"]
-                        :compiler {:output-to "resources/public/js/bundle.js"
-                                   :output-dir "resource/public/js"
+                        :jar true
+                        :compiler {:output-to "resources/public/js/compiled/bundle.js"
                                    :main "marketplace-aggregator.main"
                                    :asset-path "js"
                                    :optimizations :whitespace

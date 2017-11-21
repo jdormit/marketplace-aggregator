@@ -41,7 +41,7 @@
                (page/include-js "/js/jquery.min.js")
                (page/include-js "/js/jquery.dataTables.min.js")
                (page/include-js "/js/dataTables.bootstrap4.min.js")
-               (page/include-js "/js/bundle.js")
+               (page/include-js "/js/compiled/bundle.js")
                (page/include-css "/css/bootstrap.min.css")
                (page/include-css "/css/dataTables.bootstrap4.min.css")]
               [:body
