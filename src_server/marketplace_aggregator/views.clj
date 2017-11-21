@@ -10,6 +10,7 @@
 
 (def ebay-campaign-id (env :ebay-campaign-id))
 (def google-analytics-id (env :google-analytics-id))
+(def google-maps-api-key (env :google-maps-api-key))
 
 (defn google-analytics [id]
   (hiccup/html
@@ -38,11 +39,15 @@
                (google-analytics google-analytics-id)
                [:script (str "window._epn = {campaign:" ebay-campaign-id "};")]
                (page/include-js "/js/epn-smart-tools.js")
+               (page/include-js (str "http://maps.googleapis.com/maps/api/js"
+                                     "?libraries=places"
+                                     "&key=" google-maps-api-key))
                (page/include-js "/js/jquery.min.js")
+               (page/include-js "/js/jquery.placepicker.min.js")
                (page/include-js "/js/compiled/bundle.js")
-               (page/include-css "/css/bootstrap.min.css")
-               [:body
-                [:div.container (apply str body)]]))
+               (page/include-css "/css/bootstrap.min.css")]
+              [:body
+               [:div.container (apply str body)]]))
 
 (defn source-checkbox [name value]
   [:div.form-check.form-check-inline
@@ -117,13 +122,10 @@
                       "&subject="
                       (URLEncoder/encode "Add City Request"))}
           "Don't see your city?"]]
-        [:select#location.form-control.custom-select
+        [:input#location.form-control
          {:name "location"
-          :required "true"}
-         (map (fn [loc]
-                [:option {:value (name (first loc))}
-                 (locations/display-location (second loc))])
-              (sort-by #(:city (second %)) locations/locations))]]
+          :type "text"
+          :required "true"}]]
        [:div.form-group.col-12
         [:label "Marketplaces"]
         [:div.form-group

@@ -1,5 +1,6 @@
 (ns marketplace-aggregator.main)
 
-(enable-console-print!)
+(defn jquery-stuff []
+  (.placepicker (js/$ "#location")))
 
-(println "Hello from Clojure!")
+(.ready (js/$ "document") jquery-stuff)
