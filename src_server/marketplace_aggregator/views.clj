@@ -39,13 +39,10 @@
                [:script (str "window._epn = {campaign:" ebay-campaign-id "};")]
                (page/include-js "/js/epn-smart-tools.js")
                (page/include-js "/js/jquery.min.js")
-               (page/include-js "/js/jquery.dataTables.min.js")
-               (page/include-js "/js/dataTables.bootstrap4.min.js")
                (page/include-js "/js/compiled/bundle.js")
                (page/include-css "/css/bootstrap.min.css")
-               (page/include-css "/css/dataTables.bootstrap4.min.css")]
-              [:body
-               [:div.container (apply str body)]]))
+               [:body
+                [:div.container (apply str body)]]))
 
 (defn source-checkbox [name value]
   [:div.form-check.form-check-inline
