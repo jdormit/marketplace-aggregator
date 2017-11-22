@@ -6,7 +6,7 @@
         lat-lng (.getLatLng placepicker)
         lat (.lat lat-lng)
         lng (.lng lat-lng)]
-    (.val (js/$ "#location")
+    (.val (js/$ "#lat-lng")
           (str lat "," lng))
     (this-as form (.submit form))))
 

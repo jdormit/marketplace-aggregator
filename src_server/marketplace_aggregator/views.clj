@@ -112,19 +112,12 @@
           :name "query"
           :required "true"
           :placeholder "Product Name"}]]
+       [:input#lat-lng {:type "hidden"
+                        :name "location"}]
        [:div.form-group.col-sm-6
         [:label {:for "location"} "Location"]
-        [:span.float-right
-         [:a
-          {:href (str "feedback?feedback="
-                      (URLEncoder/encode
-                       "Please add my city! I live in:")
-                      "&subject="
-                      (URLEncoder/encode "Add City Request"))}
-          "Don't see your city?"]]
         [:input#location.form-control
-         {:name "location"
-          :type "text"
+         {:type "text"
           :required "true"}]]
        [:div.form-group.col-12
         [:label "Marketplaces"]
